@@ -87,7 +87,7 @@ public class Address {
 
     // toString sin navegación a objetos relacionados (solo IDs)
 
-    @Override
+   /* @Override
     public String toString() {
         return "Address{" +
                 "addressId=" + addressId +
@@ -101,5 +101,5 @@ public class Address {
                 ", postalCode='" + postalCode + '\'' +
                 ", isDefault=" + isDefault +
                 '}';
-    }
+    }*/
 }

@@ -1,6 +1,8 @@
 package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.util.ValidationUtils;
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -29,6 +31,12 @@ import java.util.Objects;
  * - 1:N con CartItem (un producto puede estar en múltiples carritos)
  * - 1:N con OrderItem (un producto puede estar en múltiples órdenes)
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 public class Product {
 
     private Long productId;
@@ -42,8 +50,7 @@ public class Product {
     private LocalDateTime createdAt;
 
     // Constructor vacío (requerido para JPA futuro)
-    public Product() {
-    }
+
 
     // Constructor con campos obligatorios
     public Product(Category category, String sku, String name, BigDecimal price, Integer stockQty) {
@@ -57,93 +64,10 @@ public class Product {
     }
 
     // Constructor completo (excepto ID y timestamp autogenerados)
-    public Product(Category category, String sku, String name, String description,
-                   BigDecimal price, Integer stockQty, Boolean isActive) {
-        this.category = category;
-        this.sku = sku;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.stockQty = stockQty;
-        this.isActive = isActive != null ? isActive : true;
-        this.createdAt = LocalDateTime.now();
-    }
+
 
     // Getters y Setters
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        ValidationUtils.validateNonNegative(price, "price");
-        this.price = price;
-    }
-
-    public Integer getStockQty() {
-        return stockQty;
-    }
-
-    public void setStockQty(Integer stockQty) {
-        ValidationUtils.validateNonNegative(stockQty, "stockQty");
-        this.stockQty = stockQty;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 
     // Método helper para verificar disponibilidad
     public boolean isAvailable() {
@@ -166,7 +90,7 @@ public class Product {
     }
 
     // toString sin navegación a objetos relacionados (solo IDs)
-
+/*
     @Override
     public String toString() {
         return "Product{" +
@@ -180,5 +104,5 @@ public class Product {
                 ", isAvailable=" + isAvailable() +
                 ", createdAt=" + createdAt +
                 '}';
-    }
+    }*/
 }

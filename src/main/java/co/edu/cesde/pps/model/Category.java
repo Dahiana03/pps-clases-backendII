@@ -1,5 +1,7 @@
 package co.edu.cesde.pps.model;
 
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +28,12 @@ import java.util.Objects;
  * NOTA: Los métodos de gestión bidireccional (addSubcategory, removeSubcategory) fueron movidos
  * a la capa de servicio (CategoryService) en etapa 05 para mantener el modelo limpio.
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 public class Category {
 
     private Long categoryId;
@@ -37,11 +45,7 @@ public class Category {
     private List<Category> subcategories;
     private List<Product> products;
 
-    // Constructor vacío (requerido para JPA futuro)
-    public Category() {
-        this.subcategories = new ArrayList<>();
-        this.products = new ArrayList<>();
-    }
+
 
     // Constructor para categoría raíz (sin parent)
     public Category(String name, String slug) {
@@ -62,54 +66,6 @@ public class Category {
     }
 
     // Getters y Setters
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Category getParent() {
-        return parent;
-    }
-
-    public void setParent(Category parent) {
-        this.parent = parent;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
-
-    public List<Category> getSubcategories() {
-        return subcategories;
-    }
-
-    public void setSubcategories(List<Category> subcategories) {
-        this.subcategories = subcategories;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
 
     // Métodos helper de consulta (sin efectos secundarios)
 
@@ -137,7 +93,8 @@ public class Category {
 
     // toString sin navegación a objetos relacionados (solo IDs y tamaño de colecciones)
 
-    @Override
+  /* se deja por sino se debe de borrar
+   @Override
     public String toString() {
         return "Category{" +
                 "categoryId=" + categoryId +
@@ -148,5 +105,5 @@ public class Category {
                 ", subcategoriesCount=" + (subcategories != null ? subcategories.size() : 0) +
                 ", productsCount=" + (products != null ? products.size() : 0) +
                 '}';
-    }
+    }*/
 }

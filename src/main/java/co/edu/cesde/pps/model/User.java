@@ -1,6 +1,8 @@
 package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.enums.UserStatus;
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,12 @@ import java.util.Objects;
  * NOTA: Los métodos de gestión bidireccional (addAddress, removeAddress) fueron movidos
  * a la capa de servicio (UserService) en etapa 05 para mantener el modelo limpio.
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 public class User {
 
     private Long userId;
@@ -50,9 +58,7 @@ public class User {
     private List<Address> addresses;
 
     // Constructor vacío (requerido para JPA futuro)
-    public User() {
-        this.addresses = new ArrayList<>();
-    }
+
 
     // Constructor con campos obligatorios
     public User(Role role, String email, String passwordHash, String firstName, String lastName) {
@@ -67,106 +73,17 @@ public class User {
     }
 
     // Constructor completo (excepto ID y timestamp autogenerados)
-    public User(Role role, String email, String passwordHash, String firstName, String lastName,
-                String phone, UserStatus status) {
-        this.role = role;
-        this.email = email;
-        this.passwordHash = passwordHash;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.status = status != null ? status : UserStatus.ACTIVE;
-        this.createdAt = LocalDateTime.now();
-        this.addresses = new ArrayList<>();
-    }
+
 
     // Getters y Setters
 
-    public Long getUserId() {
-        return userId;
-    }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(UserStatus status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
-    }
 
     // Métodos helper de consulta (sin efectos secundarios)
 
     /**
      * Obtiene la dirección por defecto del usuario
-     */
+
     public Address getDefaultAddress() {
         return addresses.stream()
                 .filter(Address::getIsDefault)
@@ -176,10 +93,10 @@ public class User {
 
     /**
      * Obtiene el nombre completo del usuario
-     */
+
     public String getFullName() {
         return firstName + " " + lastName;
-    }
+    } */
 
     // equals y hashCode basados en ID
 
@@ -197,7 +114,7 @@ public class User {
     }
 
     // toString sin navegación a objetos relacionados (solo IDs y tamaño de colecciones)
-
+/*
     @Override
     public String toString() {
         return "User{" +
@@ -211,5 +128,5 @@ public class User {
                 ", createdAt=" + createdAt +
                 ", addressesCount=" + (addresses != null ? addresses.size() : 0) +
                 '}';
-    }
+    }*/
 }
