@@ -68,9 +68,6 @@ public class Order {
     private List<OrderItem> items;
 
     // Constructor vacío (requerido para JPA futuro)
-    public Order() {
-        this.items = new ArrayList<>();
-    }
 
     // Constructor con campos obligatorios
     public Order(String orderNumber, Long userId, Long orderStatusId,

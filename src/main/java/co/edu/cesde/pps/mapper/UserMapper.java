@@ -46,7 +46,7 @@ public class UserMapper {
         dto.setCreatedAt(user.getCreatedAt());
 
         // Campos calculados
-        dto.setFullName(user.getFullName()); // Método helper de User
+        //dto.setFullName(user.getFullName()); // Método helper de User
 
         // Campos agregados (null safety)
         if (user.getAddresses() != null) {
