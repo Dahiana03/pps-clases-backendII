@@ -58,14 +58,14 @@ public class Order {
     private Long orderStatusId;
     private Long shippingAddressId;
     private Long billingAddressId;
-    private BigDecimal subtotal;
-    private BigDecimal tax;
-    private BigDecimal shippingCost;
-    private BigDecimal total;
-    private LocalDateTime createdAt;
+    @Builder.Default private BigDecimal subtotal;
+    @Builder.Default private BigDecimal tax;
+    @Builder.Default private BigDecimal shippingCost;
+    @Builder.Default private BigDecimal total;
+    @Builder.Default private LocalDateTime createdAt;
 
     // Colección para relación 1:N con OrderItem
-    private List<OrderItem> items;
+    @Builder.Default private List<OrderItem> items;
 
     // Constructor vacío (requerido para JPA futuro)
 
@@ -89,6 +89,28 @@ public class Order {
 
 
     // Getters y Setters
+
+    public void setSubtotal(BigDecimal subtotal) {
+        ValidationUtils.validateNonNegative(subtotal, "subtotal");
+        this.subtotal = subtotal;
+    }
+
+
+    public void setTax(BigDecimal tax) {
+        ValidationUtils.validateNonNegative(tax, "tax");
+        this.tax = tax;
+    }
+
+    public void setShippingCost(BigDecimal shippingCost) {
+        ValidationUtils.validateNonNegative(shippingCost, "shippingCost");
+        this.shippingCost = shippingCost;
+    }
+
+    public void setTotal(BigDecimal total) {
+        ValidationUtils.validateNonNegative(total, "total");
+        this.total = total;
+    }
+
 
     // Método helper para calcular total automáticamente
     public BigDecimal calculateTotal() {

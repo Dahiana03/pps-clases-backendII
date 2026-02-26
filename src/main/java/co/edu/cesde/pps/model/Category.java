@@ -42,7 +42,10 @@ public class Category {
     private String slug;
 
     // Colecciones para relaciones 1:N
+    @Builder.Default
     private List<Category> subcategories;
+
+    @Builder.Default
     private List<Product> products;
 
 

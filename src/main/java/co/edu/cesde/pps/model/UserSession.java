@@ -36,7 +36,10 @@ public class UserSession {
     private Long sessionId;
     private User user; // Nullable - NULL para invitados
     private String sessionToken;
+
+    @Builder.Default
     private LocalDateTime createdAt;
+
     private LocalDateTime expiresAt;
 
     // Constructor vacío (requerido para JPA futuro)
@@ -62,6 +65,7 @@ public class UserSession {
 
 
     // Getters y Setters
+
 
 
     // Método helper para verificar si es sesión de invitado

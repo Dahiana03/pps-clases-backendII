@@ -65,6 +65,15 @@ public class CartItem {
 
     // Getters y Setters
 
+    public void setQuantity(Integer quantity) {
+        ValidationUtils.validatePositive(quantity, "quantity");
+        this.quantity = quantity;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        ValidationUtils.validateNonNegative(unitPrice, "unitPrice");
+        this.unitPrice = unitPrice;
+    }
 
 
     // Método helper para calcular subtotal del item

@@ -46,7 +46,11 @@ public class Product {
     private String description;
     private BigDecimal price;
     private Integer stockQty;
+
+    @Builder.Default
     private Boolean isActive;
+
+    @Builder.Default
     private LocalDateTime createdAt;
 
     // Constructor vacío (requerido para JPA futuro)
@@ -68,6 +72,16 @@ public class Product {
 
     // Getters y Setters
 
+    public void setPrice(BigDecimal price) {
+        ValidationUtils.validateNonNegative(price, "price");
+        this.price = price;
+    }
+
+
+    public void setStockQty(Integer stockQty) {
+        ValidationUtils.validateNonNegative(stockQty, "stockQty");
+        this.stockQty = stockQty;
+    }
 
     // Método helper para verificar disponibilidad
     public boolean isAvailable() {

@@ -46,7 +46,10 @@ public class Address {
     private String state;
     private String country;
     private String postalCode;
-    private Boolean isDefault;
+
+    @Builder.Default
+    private Boolean isDefault = false;
+
 
     // Constructor vacío (requerido para JPA futuro)
 
@@ -62,6 +65,7 @@ public class Address {
         this.country = country;
         this.postalCode = postalCode;
         this.isDefault = false;
+
     }
 
     // Constructor completo (excepto ID autogenerado)

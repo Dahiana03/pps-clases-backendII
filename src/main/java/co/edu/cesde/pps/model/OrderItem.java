@@ -70,6 +70,26 @@ public class OrderItem {
     // Getters y Setters
 
 
+    public void setQuantity(Integer quantity) {
+        ValidationUtils.validatePositive(quantity, "quantity");
+        this.quantity = quantity;
+        // Recalcular lineTotal al cambiar quantity
+        this.lineTotal = calculateLineTotal();
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        ValidationUtils.validateNonNegative(unitPrice, "unitPrice");
+        this.unitPrice = unitPrice;
+        // Recalcular lineTotal al cambiar unitPrice
+        this.lineTotal = calculateLineTotal();
+    }
+
+    public void setLineTotal(BigDecimal lineTotal) {
+        ValidationUtils.validateNonNegative(lineTotal, "lineTotal");
+        this.lineTotal = lineTotal;
+    }
+
+
     // Método helper para calcular total de la línea
     public BigDecimal calculateLineTotal() {
         return CalculationUtils.calculateOrderItemLineTotal(unitPrice, quantity);

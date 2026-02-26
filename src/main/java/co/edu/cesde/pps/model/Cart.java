@@ -82,11 +82,18 @@ public class Cart {
     private Long cartId;
     private User user; // Nullable - NULL para invitados
     private UserSession session;
+
+    @Builder.Default
     private CartStatus status;
+
+    @Builder.Default
     private LocalDateTime createdAt;
+
+    @Builder.Default
     private LocalDateTime updatedAt;
 
     // Colección para relación 1:N
+    @Builder.Default
     private List<CartItem> items;
 
 

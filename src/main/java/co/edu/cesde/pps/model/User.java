@@ -51,10 +51,15 @@ public class User {
     private String firstName;
     private String lastName;
     private String phone;
+
+    @Builder.Default
     private UserStatus status;
+
+    @Builder.Default
     private LocalDateTime createdAt;
 
     // Colecciones para relaciones 1:N
+    @Builder.Default
     private List<Address> addresses;
 
     // Constructor vacío (requerido para JPA futuro)
