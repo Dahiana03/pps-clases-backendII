@@ -1,6 +1,8 @@
 package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.enums.AddressType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.util.Objects;
@@ -29,6 +31,8 @@ import java.util.Objects;
  * - 1:N con Order (como shipping_address_id o billing_address_id)
  */
 
+@Entity
+@Table(name = "address")
 @Getter
 @Setter
 @NoArgsConstructor
