@@ -2,6 +2,8 @@ package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.enums.CartStatus;
 import co.edu.cesde.pps.util.CalculationUtils;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -70,7 +72,8 @@ import java.util.stream.Collectors;
  * NOTA: Los métodos de gestión bidireccional (addItem, removeItem) fueron movidos
  * a la capa de servicio (CartService) en etapa 05 para mantener el modelo limpio.
  */
-
+@Entity
+@Table(name = "cart")
 @Getter
 @Setter
 @NoArgsConstructor

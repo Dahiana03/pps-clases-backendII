@@ -1,6 +1,7 @@
 package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.enums.AddressType;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Objects;
@@ -28,30 +29,55 @@ import java.util.Objects;
  * - N:1 con User (muchas direcciones pertenecen a un usuario)
  * - 1:N con Order (como shipping_address_id o billing_address_id)
  */
-
+@Entity
+@Table(name = "Addres")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @ToString
+@Builder
 public class Address {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "address_id")
     private Long addressId;
+
+
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
     private AddressType type;
+
+    @Column(name = "line1", nullable = false, length = 255)
     private String line1;
+
+    @Column(name = "line2", nullable = false, length = 255)
     private String line2;
+
+    @Column(name = "city", nullable = false, length = 60)
     private String city;
+
+    @Column(name = "state", nullable = false, length = 60)
     private String state;
+
+    @Column(name = "country", nullable = false, length = 50)
     private String country;
+
+    @Column(name = "postal_code", nullable = false, length = 20)
     private String postalCode;
+
+    @Column(name = "is_default", nullable = false)
+    @Builder.Default
     private Boolean isDefault;
 
     // Constructor vacío (requerido para JPA futuro)
 
 
-    // Constructor con campos obligatorios
+   /* // Constructor con campos obligatorios
+   se  borra ya que se declararon las columnas
     public Address(User user, AddressType type, String line1, String city,
                    String state, String country, String postalCode) {
         this.user = user;
@@ -62,7 +88,7 @@ public class Address {
         this.country = country;
         this.postalCode = postalCode;
         this.isDefault = false;
-    }
+    }*/
 
     // Constructor completo (excepto ID autogenerado)
 
