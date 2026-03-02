@@ -91,6 +91,11 @@ public class Payment {
 
 
     // Getters y Setters
+    public void setAmount(BigDecimal amount) {
+        // Validación: amount puede ser negativo (reembolsos), pero no null
+        ValidationUtils.validateNotNull(amount, "amount");
+        this.amount = amount;
+    }
 
 
     // Método helper para verificar si el pago está completado

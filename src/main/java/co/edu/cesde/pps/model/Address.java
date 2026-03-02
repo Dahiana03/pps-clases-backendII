@@ -2,6 +2,7 @@ package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.enums.AddressType;
 import jakarta.persistence.*;
+
 import lombok.*;
 
 import java.util.Objects;
@@ -29,6 +30,7 @@ import java.util.Objects;
  * - N:1 con User (muchas direcciones pertenecen a un usuario)
  * - 1:N con Order (como shipping_address_id o billing_address_id)
  */
+
 @Entity
 @Table(name = "Addres")
 @Getter
@@ -44,7 +46,7 @@ public class Address {
     @Column(name = "address_id")
     private Long addressId;
 
-
+    @Column(name = "user_id")
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -73,6 +75,7 @@ public class Address {
     @Builder.Default
     private Boolean isDefault;
 
+
     // Constructor vacío (requerido para JPA futuro)
 
 
@@ -88,7 +91,9 @@ public class Address {
         this.country = country;
         this.postalCode = postalCode;
         this.isDefault = false;
+
     }*/
+
 
     // Constructor completo (excepto ID autogenerado)
 
