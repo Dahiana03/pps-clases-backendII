@@ -2,6 +2,7 @@ package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.enums.Currency;
 import co.edu.cesde.pps.util.ValidationUtils;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -38,6 +39,8 @@ import java.util.Objects;
  * - N:1 con PaymentMethod (muchos pagos usan un método)
  * - N:1 con PaymentStatus (muchos pagos tienen un estado)
  */
+@Entity
+@Table(name = "payment")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -46,13 +49,30 @@ import java.util.Objects;
 @ToString
 public class Payment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "payment_id")
     private Long paymentId;
+
+    @Column(name = "order_id")
     private Order order;
+
+    @Column(name = "payment_method_id")
     private PaymentMethod paymentMethod;
+
+    @Column(name = "payment_status_id")
     private PaymentStatus paymentStatus;
+
+    @Column(name = "amount")
     private BigDecimal amount;
+
+    @Column(name = "currency")
     private Currency currency;
+
+    @Column(name = "provider_reference")
     private String providerReference;
+
+    @Column(name = "paid_at")
     private LocalDateTime paidAt;
 
 

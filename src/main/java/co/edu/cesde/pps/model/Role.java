@@ -1,5 +1,6 @@
 package co.edu.cesde.pps.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Objects;
@@ -17,6 +18,8 @@ import java.util.Objects;
  * Relaciones (futuro - etapa02):
  * - 1:N con User (un rol puede tener múltiples usuarios)
  */
+@Entity
+@Table(name = "role")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,8 +28,15 @@ import java.util.Objects;
 @ToString
 public class Role {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private Long roleId;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "description")
     private String description;
 
     // Constructor vacío (requerido para JPA futuro)

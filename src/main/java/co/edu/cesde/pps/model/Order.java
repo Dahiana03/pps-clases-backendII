@@ -2,6 +2,7 @@ package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.util.CalculationUtils;
 import co.edu.cesde.pps.util.ValidationUtils;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -44,6 +45,8 @@ import java.util.Objects;
  * - 1:N con OrderItem (items de la orden)
  * - 1:N con Payment (pagos asociados, puede haber reintentos)
  */
+@Entity
+@Table(name = "order")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -52,17 +55,41 @@ import java.util.Objects;
 @ToString
 public class Order {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id")
     private Long orderId;
+
+    @Column(name = "order_number")
     private String orderNumber;
+
+    @Column(name = "user_id")
     private Long userId; // NOT NULL - checkout requiere usuario registrado
+
+    @Column(name = "order_status_id")
     private Long orderStatusId;
+
+    @Column(name = "shipping_address_id")
     private Long shippingAddressId;
+
+    @Column(name = "billing_address_id")
     private Long billingAddressId;
+
+    @Column(name = "subtotal")
     private BigDecimal subtotal;
+
+    @Column(name = "tax")
     private BigDecimal tax;
+
+    @Column(name = "shipping_cost")
     private BigDecimal shippingCost;
+
+    @Column(name = "total")
     private BigDecimal total;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
 
     // Colección para relación 1:N con OrderItem
     private List<OrderItem> items;

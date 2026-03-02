@@ -2,8 +2,7 @@ package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.enums.CartStatus;
 import co.edu.cesde.pps.util.CalculationUtils;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -82,11 +81,24 @@ import java.util.stream.Collectors;
 @ToString
 public class Cart {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_id")
     private Long cartId;
+
+    @Column(name = "user_id")
     private User user; // Nullable - NULL para invitados
+
+    @Column(name = "session_id")
     private UserSession session;
+
+    @Column(name = "status")
     private CartStatus status;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "update_at")
     private LocalDateTime updatedAt;
 
     // Colección para relación 1:N
