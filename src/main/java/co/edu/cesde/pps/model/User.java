@@ -1,6 +1,7 @@
 package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.enums.UserStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -52,7 +53,8 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "role_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @Column(name = "email")
@@ -79,11 +81,14 @@ public class User {
 
 
     // Colecciones para relaciones 1:N
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonManagedReference("user-addresses")
+    @Builder.Default
     private List<Address> addresses;
 
     // Constructor vacío (requerido para JPA futuro)
 
-
+    /**
     // Constructor con campos obligatorios
     public User(Role role, String email, String passwordHash, String firstName, String lastName) {
         this.role = role;
@@ -105,7 +110,7 @@ public class User {
 
     // Métodos helper de consulta (sin efectos secundarios)
 
-    /**
+
      * Obtiene la dirección por defecto del usuario
 
     public Address getDefaultAddress() {

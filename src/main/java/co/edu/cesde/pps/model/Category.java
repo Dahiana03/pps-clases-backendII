@@ -44,7 +44,8 @@ public class Category {
     @Column(name = "category_id")
     private Long categoryId;
 
-    @Column(name = "parent_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
     private Category parent; // Nullable - NULL para categorías raíz
 
     @Column(name = "name")

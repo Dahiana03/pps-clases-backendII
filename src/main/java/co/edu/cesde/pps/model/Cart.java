@@ -72,7 +72,7 @@ import java.util.stream.Collectors;
  * a la capa de servicio (CartService) en etapa 05 para mantener el modelo limpio.
  */
 @Entity
-@Table(name = "cart")
+@Table(name = "carts")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -86,20 +86,27 @@ public class Cart {
     @Column(name = "cart_id")
     private Long cartId;
 
-    @Column(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user; // Nullable - NULL para invitados
 
-    @Column(name = "session_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "session_id")
     private UserSession session;
 
-    @Column(name = "status")
-    private CartStatus status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Builder.Default
+    private CartStatus status = CartStatus.OPEN;;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 
-    @Column(name = "update_at")
-    private LocalDateTime updatedAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Builder.Default
+    private LocalDateTime createdAt  = LocalDateTime.now();
+
+    @Column(name = "update_at", nullable = false)
+    @Builder.Default
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
     // Colección para relación 1:N
     private List<CartItem> items;

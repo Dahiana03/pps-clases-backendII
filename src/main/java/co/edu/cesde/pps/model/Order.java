@@ -63,16 +63,20 @@ public class Order {
     @Column(name = "order_number")
     private String orderNumber;
 
-    @Column(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private Long userId; // NOT NULL - checkout requiere usuario registrado
 
-    @Column(name = "order_status_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_status_id")
     private Long orderStatusId;
 
-    @Column(name = "shipping_address_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shipping_address_id")
     private Long shippingAddressId;
 
-    @Column(name = "billing_address_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "billing_address_id")
     private Long billingAddressId;
 
     @Column(name = "subtotal")

@@ -1,6 +1,7 @@
 package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.enums.AddressType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -32,7 +33,7 @@ import java.util.Objects;
  */
 
 @Entity
-@Table(name = "Addres")
+@Table(name = "addresses")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -46,7 +47,9 @@ public class Address {
     @Column(name = "address_id")
     private Long addressId;
 
-    @Column(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference("user-addresses")
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -73,7 +76,7 @@ public class Address {
 
     @Column(name = "is_default", nullable = false)
     @Builder.Default
-    private Boolean isDefault;
+    private Boolean isDefault = false;
 
 
     // Constructor vacío (requerido para JPA futuro)
