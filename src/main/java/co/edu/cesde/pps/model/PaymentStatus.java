@@ -18,7 +18,7 @@ import java.util.Objects;
  * - 1:N con Payment (un estado puede aplicar a múltiples pagos)
  */
 @Entity
-@Table(name = "payment_status")
+@Table(name = "payment_statuses")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,16 +32,12 @@ public class PaymentStatus {
     @Column(name = "payment_status_id")
     private Long paymentStatusId;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, unique = true, length = 50)
     private String name;
 
+    @Column(name = "description", length = 255)
+    private String description;
 
-    // Constructor con campos obligatorios
-    public PaymentStatus(String name) {
-        this.name = name;
-    }
-
-    // Getters y Setters
 
     // equals y hashCode basados en ID
 

@@ -2,6 +2,7 @@ package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.util.CalculationUtils;
 import co.edu.cesde.pps.util.ValidationUtils;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -60,7 +61,7 @@ public class Order {
     @Column(name = "order_id")
     private Long orderId;
 
-    @Column(name = "order_number")
+    @Column(name = "order_number", nullable = false, unique = true, length = 50)
     private String orderNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -68,58 +69,65 @@ public class Order {
     private Long userId; // NOT NULL - checkout requiere usuario registrado
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_status_id")
+    @JoinColumn(name = "order_status_id", nullable = false)
     private Long orderStatusId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shipping_address_id")
+    @JoinColumn(name = "shipping_address_id", nullable = false)
     private Long shippingAddressId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "billing_address_id")
+    @JoinColumn(name = "billing_address_id", nullable = false)
     private Long billingAddressId;
 
-    @Column(name = "subtotal")
-    private BigDecimal subtotal;
+    @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
+    @Builder.Default
+    private BigDecimal subtotal = BigDecimal.ZERO;
 
-    @Column(name = "tax")
-    private BigDecimal tax;
+    @Column(name = "tax", nullable = false, precision = 10, scale = 2)
+    @Builder.Default
+    private BigDecimal tax = BigDecimal.ZERO;
 
-    @Column(name = "shipping_cost")
-    private BigDecimal shippingCost;
+    @Column(name = "shipping_cost", nullable = false, precision = 10, scale = 2)
+    @Builder.Default
+    private BigDecimal shippingCost = BigDecimal.ZERO;
 
-    @Column(name = "total")
-    private BigDecimal total;
+    @Column(name = "total", nullable = false, precision = 10, scale = 2)
+    @Builder.Default
+    private BigDecimal total = BigDecimal.ZERO;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 
 
     // Colección para relación 1:N con OrderItem
-    private List<OrderItem> items;
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @JsonManagedReference("order-items")
+    @Builder.Default
+    private List<OrderItem> items = new ArrayList<>();
 
-    // Constructor vacío (requerido para JPA futuro)
+    // Setters personalizados con validación (override de Lombok)
 
-    // Constructor con campos obligatorios
-    public Order(String orderNumber, Long userId, Long orderStatusId,
-                 Long shippingAddressId, Long billingAddressId) {
-        this.orderNumber = orderNumber;
-        this.userId = userId;
-        this.orderStatusId = orderStatusId;
-        this.shippingAddressId = shippingAddressId;
-        this.billingAddressId = billingAddressId;
-        this.subtotal = BigDecimal.ZERO;
-        this.tax = BigDecimal.ZERO;
-        this.shippingCost = BigDecimal.ZERO;
-        this.total = BigDecimal.ZERO;
-        this.createdAt = LocalDateTime.now();
-        this.items = new ArrayList<>();
+    public void setSubtotal(BigDecimal subtotal) {
+        ValidationUtils.validateNonNegative(subtotal, "subtotal");
+        this.subtotal = subtotal;
     }
 
-    // Constructor completo (excepto ID y timestamp autogenerado)
+    public void setTax(BigDecimal tax) {
+        ValidationUtils.validateNonNegative(tax, "tax");
+        this.tax = tax;
+    }
 
+    public void setShippingCost(BigDecimal shippingCost) {
+        ValidationUtils.validateNonNegative(shippingCost, "shippingCost");
+        this.shippingCost = shippingCost;
+    }
 
-    // Getters y Setters
+    public void setTotal(BigDecimal total) {
+        ValidationUtils.validateNonNegative(total, "total");
+        this.total = total;
+    }
 
     // Método helper para calcular total automáticamente
     public BigDecimal calculateTotal() {

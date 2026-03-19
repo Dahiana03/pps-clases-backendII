@@ -2,6 +2,7 @@ package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.enums.CartStatus;
 import co.edu.cesde.pps.util.CalculationUtils;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -109,39 +110,19 @@ public class Cart {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     // Colección para relación 1:N
-    private List<CartItem> items;
+
+    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
+    @JsonManagedReference("cart-items")
+    @Builder.Default
+    private List<CartItem> items = new ArrayList<>();
 
 
-
-    // Constructor para carrito de invitado
-    public Cart(UserSession session) {
-        this.user = null; // Invitado
-        this.session = session;
-        this.status = CartStatus.OPEN;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        this.items = new ArrayList<>();
-    }
-
-    // Constructor para carrito de usuario registrado
-    public Cart(User user, UserSession session) {
-        this.user = user;
-        this.session = session;
-        this.status = CartStatus.OPEN;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        this.items = new ArrayList<>();
-    }
-
-    // Getters y Setters
-
-
-    // Métodos helper de consulta (sin efectos secundarios)
 
     /**
      * Verifica si es carrito de invitado
      */
     public boolean isGuestCart() {
+
         return user == null;
     }
 
@@ -149,6 +130,7 @@ public class Cart {
      * Verifica si el carrito está activo
      */
     public boolean isOpen() {
+
         return status == CartStatus.OPEN;
     }
 
@@ -195,4 +177,18 @@ public class Cart {
                 ", updatedAt=" + updatedAt +
                 '}';
     }*/
+
+   @Override
+   public String toString() {
+       return "Cart{" +
+               "cartId=" + cartId +
+               ", userId=" + (user != null ? user.getUserId() : null) +
+               ", sessionId=" + (session != null ? session.getSessionId() : null) +
+               ", status=" + status +
+               ", createdAt=" + createdAt +
+               ", updatedAt=" + updatedAt +
+               ", itemsCount=" + (items != null ? items.size() : 0) +
+               ", total=" + calculateTotal() +
+               '}';
+   }
 }

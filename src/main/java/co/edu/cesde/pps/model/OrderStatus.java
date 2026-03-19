@@ -39,13 +39,6 @@ public class OrderStatus {
     @Column(name = "description", length = 255)
     private String description;
 
-
-    // Constructor con campos obligatorios
-
-
-    // Getters y Setters
-
-
     // equals y hashCode basados en ID
 
     @Override

@@ -2,6 +2,7 @@ package co.edu.cesde.pps.model;
 
 import co.edu.cesde.pps.util.CalculationUtils;
 import co.edu.cesde.pps.util.ValidationUtils;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,7 +37,9 @@ import java.util.Objects;
  * - N:1 con Product (muchos items referencian a un producto)
  */
 @Entity
-@Table(name = "cart_item")
+@Table(name = "cart_items",  uniqueConstraints = {
+@UniqueConstraint(columnNames = {"cart_id", "product_id"})
+        })
 @Getter
 @Setter
 @NoArgsConstructor
@@ -52,34 +55,22 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id",  nullable = false)
+    @JsonBackReference("cart-items")
     private Cart cart;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity",  nullable = false)
     private Integer quantity;
 
-    @Column(name = "unit_price")
+    @Column(name = "unit_price",  nullable = false, precision = 10, scale = 2)
     private BigDecimal unitPrice;
 
-    @Column(name = "added_at")
+    @Column(name = "added_at",  nullable = false, updatable = false)
     private LocalDateTime addedAt;
 
-
-    // Constructor con campos obligatorios
-    public CartItem(Cart cart, Product product, Integer quantity, BigDecimal unitPrice) {
-        this.cart = cart;
-        this.product = product;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-        this.addedAt = LocalDateTime.now();
-    }
-
-    // Constructor completo (excepto ID y timestamp autogenerado)
-
-    // Getters y Setters
 
     public void setQuantity(Integer quantity) {
         ValidationUtils.validatePositive(quantity, "quantity");
@@ -94,6 +85,7 @@ public class CartItem {
 
     // Método helper para calcular subtotal del item
     public BigDecimal calculateSubtotal() {
+
         return CalculationUtils.calculateCartItemSubtotal(unitPrice, quantity);
     }
 
@@ -125,4 +117,17 @@ public class CartItem {
                 ", addedAt=" + addedAt +
                 '}';
     }*/
+
+    @Override
+    public String toString() {
+        return "CartItem{" +
+                "cartItemId=" + cartItemId +
+                ", cartId=" + (cart != null ? cart.getCartId() : null) +
+                ", productId=" + (product != null ? product.getProductId() : null) +
+                ", quantity=" + quantity +
+                ", unitPrice=" + unitPrice +
+                ", subtotal=" + calculateSubtotal() +
+                ", addedAt=" + addedAt +
+                '}';
+    }
 }

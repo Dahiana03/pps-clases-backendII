@@ -79,33 +79,6 @@ public class Address {
     private Boolean isDefault = false;
 
 
-    // Constructor vacío (requerido para JPA futuro)
-
-
-   /* // Constructor con campos obligatorios
-   se  borra ya que se declararon las columnas
-    public Address(User user, AddressType type, String line1, String city,
-                   String state, String country, String postalCode) {
-        this.user = user;
-        this.type = type;
-        this.line1 = line1;
-        this.city = city;
-        this.state = state;
-        this.country = country;
-        this.postalCode = postalCode;
-        this.isDefault = false;
-
-    }*/
-
-
-    // Constructor completo (excepto ID autogenerado)
-
-
-    // Getters y Setters
-
-
-    // equals y hashCode basados en ID
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -116,12 +89,13 @@ public class Address {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(addressId);
     }
 
     // toString sin navegación a objetos relacionados (solo IDs)
 
-   /* @Override
+    @Override
     public String toString() {
         return "Address{" +
                 "addressId=" + addressId +
@@ -135,5 +109,5 @@ public class Address {
                 ", postalCode='" + postalCode + '\'' +
                 ", isDefault=" + isDefault +
                 '}';
-    }*/
+    }
 }

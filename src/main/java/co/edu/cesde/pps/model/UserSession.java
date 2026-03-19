@@ -27,7 +27,7 @@ import java.util.Objects;
  * - 1:N con Cart (una sesión puede tener múltiples carritos en el tiempo)
  */
 @Entity
-@Table(name = "user_session")
+@Table(name = "user_sessions")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -41,42 +41,19 @@ public class UserSession {
     @Column(name = "session_id")
     private Long sessionId;
 
-    @Column(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user; // Nullable - NULL para invitados
 
-    @Column(name = "session_token")
+    @Column(name = "session_token", nullable = false, unique = true, length = 255)
     private String sessionToken;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "expires_at")
+    @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
-
-
-    // Constructor vacío (requerido para JPA futuro)
-
-
-    // Constructor para sesión de invitado (sin user)
-    public UserSession(String sessionToken, LocalDateTime expiresAt) {
-        this.user = null; // Invitado
-        this.sessionToken = sessionToken;
-        this.createdAt = LocalDateTime.now();
-        this.expiresAt = expiresAt;
-    }
-
-    // Constructor para sesión de usuario registrado
-    public UserSession(User user, String sessionToken, LocalDateTime expiresAt) {
-        this.user = user;
-        this.sessionToken = sessionToken;
-        this.createdAt = LocalDateTime.now();
-        this.expiresAt = expiresAt;
-    }
-
-    // Constructor completo (excepto ID y createdAt autogenerados)
-
-
-    // Getters y Setters
 
 
     // Método helper para verificar si es sesión de invitado

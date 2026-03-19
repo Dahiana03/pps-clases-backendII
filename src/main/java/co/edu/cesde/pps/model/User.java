@@ -39,7 +39,7 @@ import java.util.Objects;
  * a la capa de servicio (UserService) en etapa 05 para mantener el modelo limpio.
  */
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -57,62 +57,40 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "password_hash")
+    @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @Column(name = "phone")
+    @Column(name = "phone", length = 20)
     private String phone;
 
-    @Column(name = "status")
-    private UserStatus status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Builder.Default
+    private UserStatus status = UserStatus.ACTIVE;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 
 
     // Colecciones para relaciones 1:N
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonManagedReference("user-addresses")
     @Builder.Default
-    private List<Address> addresses;
-
-    // Constructor vacío (requerido para JPA futuro)
+    private List<Address> addresses = new ArrayList<>();
 
     /**
-    // Constructor con campos obligatorios
-    public User(Role role, String email, String passwordHash, String firstName, String lastName) {
-        this.role = role;
-        this.email = email;
-        this.passwordHash = passwordHash;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.status = UserStatus.ACTIVE; // Por defecto activo
-        this.createdAt = LocalDateTime.now();
-        this.addresses = new ArrayList<>();
-    }
-
-    // Constructor completo (excepto ID y timestamp autogenerados)
-
-
-    // Getters y Setters
-
-
-
-    // Métodos helper de consulta (sin efectos secundarios)
-
-
      * Obtiene la dirección por defecto del usuario
-
+     */
     public Address getDefaultAddress() {
         return addresses.stream()
                 .filter(Address::getIsDefault)
@@ -122,10 +100,10 @@ public class User {
 
     /**
      * Obtiene el nombre completo del usuario
-
+     */
     public String getFullName() {
         return firstName + " " + lastName;
-    } */
+    }
 
     // equals y hashCode basados en ID
 
@@ -137,15 +115,13 @@ public class User {
         return Objects.equals(userId, user.userId);
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return Objects.hash(userId);
     }
 
     // toString sin navegación a objetos relacionados (solo IDs y tamaño de colecciones)
 /*
     @Override
-    public String toString() {
         return "User{" +
                 "userId=" + userId +
                 ", role=" + (role != null ? role.getName() : "null") +

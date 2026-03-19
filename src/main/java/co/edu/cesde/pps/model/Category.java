@@ -1,5 +1,7 @@
 package co.edu.cesde.pps.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,7 +38,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
+
 public class Category {
 
     @Id
@@ -46,49 +48,31 @@ public class Category {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
+    @JsonBackReference("category-parent")
     private Category parent; // Nullable - NULL para categorías raíz
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "slug")
+    @Column(name = "slug", nullable = false, unique = true, length = 100)
     private String slug;
 
     // Colecciones para relaciones 1:N
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    @JsonManagedReference("category-parent")
     @Builder.Default
     private List<Category> subcategories;
 
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Product> products;
 
-
-
-    // Constructor para categoría raíz (sin parent)
-    public Category(String name, String slug) {
-        this.parent = null; // Categoría raíz
-        this.name = name;
-        this.slug = slug;
-        this.subcategories = new ArrayList<>();
-        this.products = new ArrayList<>();
-    }
-
-    // Constructor para subcategoría (con parent)
-    public Category(Category parent, String name, String slug) {
-        this.parent = parent;
-        this.name = name;
-        this.slug = slug;
-        this.subcategories = new ArrayList<>();
-        this.products = new ArrayList<>();
-    }
-
-    // Getters y Setters
-
-    // Métodos helper de consulta (sin efectos secundarios)
 
     /**
      * Verifica si es categoría raíz
      */
     public boolean isRootCategory() {
+
         return parent == null;
     }
 
@@ -104,6 +88,7 @@ public class Category {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(categoryId);
     }
 
@@ -122,4 +107,17 @@ public class Category {
                 ", productsCount=" + (products != null ? products.size() : 0) +
                 '}';
     }*/
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "categoryId=" + categoryId +
+                ", parentId=" + (parent != null ? parent.getCategoryId() : null) +
+                ", name='" + name + '\'' +
+                ", slug='" + slug + '\'' +
+                ", isRoot=" + isRootCategory() +
+                ", subcategoriesCount=" + (subcategories != null ? subcategories.size() : 0) +
+                ", productsCount=" + (products != null ? products.size() : 0) +
+                '}';
+    }
 }

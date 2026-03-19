@@ -50,7 +50,7 @@ public class OrderService {
     private final Random random;
 
     public OrderService(UserService userService, CartService cartService,
-                       AddressService addressService, ProductService productService) {
+                        AddressService addressService, ProductService productService) {
         this.orderMapper = new OrderMapper();
         this.userService = userService;
         this.cartService = cartService;
@@ -87,9 +87,9 @@ public class OrderService {
      * @throws InsufficientStockException si no hay stock suficiente
      */
     public OrderDTO checkout(Long userId, Long cartId, Long shippingAddressId,
-                            Long billingAddressId) {
+                             Long billingAddressId) {
         // 1. Validar usuario está registrado
-        userService.findUserEntityOrThrow(userId);
+        User user = userService.findUserEntityOrThrow(userId);
 
         // 2. Obtener y validar carrito
         Cart cart = cartService.findCartEntityOrThrow(cartId);
@@ -97,7 +97,7 @@ public class OrderService {
         // Validar estado OPEN
         if (cart.getStatus() != CartStatus.OPEN) {
             throw new InvalidCartStateException(cartId, cart.getStatus(),
-                CartStatus.OPEN, "checkout");
+                    CartStatus.OPEN, "checkout");
         }
 
         // Validar no vacío
@@ -129,25 +129,33 @@ public class OrderService {
             // Verificar que el producto esté activo
             if (!product.getIsActive()) {
                 throw new ValidationException("Product '" + product.getName() +
-                    "' is no longer available");
+                        "' is no longer available");
             }
 
             // Verificar stock suficiente
             if (!CalculationUtils.hasEnoughStock(product.getStockQty(), item.getQuantity())) {
                 throw new InsufficientStockException(product.getProductId(),
-                    product.getSku(), item.getQuantity(), product.getStockQty());
+                        product.getSku(), item.getQuantity(), product.getStockQty());
             }
         }
 
         // 5. Crear orden con número único
         String orderNumber = generateOrderNumber();
+
+        // NOTE: En esta etapa no hay repositorios JPA; usamos una entity de catálogo mínima.
+        OrderStatus pendingStatus = OrderStatus.builder()
+                .orderStatusId(1L)
+                .name("PENDING")
+                .description("Order created, awaiting payment")
+                .build();
+
         Order order = Order.builder()
                 .orderId(generateNextId())
                 .orderNumber(orderNumber)
-                .userId(userId)
-                .orderStatusId(1L)
-                .shippingAddressId(shippingAddressId)
-                .billingAddressId(billingAddressId)
+                .user(user)
+                .orderStatus(pendingStatus)
+                .shippingAddress(shippingAddress)
+                .billingAddress(billingAddress)
                 .subtotal(BigDecimal.ZERO)
                 .tax(BigDecimal.ZERO)
                 .shippingCost(BigDecimal.ZERO)
@@ -157,13 +165,15 @@ public class OrderService {
 
         // 6. Copiar items del carrito a la orden (congelar precios históricos)
         for (CartItem cartItem : cart.getItems()) {
-            BigDecimal lineTotal = null;
+            BigDecimal lineTotal = CalculationUtils.calculateOrderItemLineTotal(
+                    cartItem.getUnitPrice(), cartItem.getQuantity());
+
             OrderItem orderItem = OrderItem.builder()
                     .orderItemId(generateNextOrderItemId())
                     .order(order)
                     .product(cartItem.getProduct())
                     .quantity(cartItem.getQuantity())
-                    .unitPrice(cartItem.getUnitPrice())
+                    .unitPrice(cartItem.getUnitPrice())  // Precio histórico al momento de compra
                     .lineTotal(lineTotal)
                     .build();
 
@@ -191,7 +201,7 @@ public class OrderService {
         // 8. Actualizar stock de productos
         for (CartItem item : cart.getItems()) {
             productService.decreaseStock(item.getProduct().getProductId(),
-                item.getQuantity());
+                    item.getQuantity());
         }
 
         // 9. Marcar carrito como CONVERTED
@@ -245,7 +255,7 @@ public class OrderService {
 
         // TODO Etapa 06: List<Order> orders = orderRepository.findByUserId(userId);
         List<Order> userOrders = ordersInMemory.stream()
-                .filter(o -> o.getUserId().equals(userId))
+                .filter(o -> o.getUser() != null && o.getUser().getUserId().equals(userId))
                 .collect(Collectors.toList());
 
         return orderMapper.toDTOList(userOrders);
@@ -260,7 +270,8 @@ public class OrderService {
     public List<OrderDTO> findOrdersByStatus(Long statusId) {
         // TODO Etapa 06: List<Order> orders = orderRepository.findByOrderStatusId(statusId);
         List<Order> statusOrders = ordersInMemory.stream()
-                .filter(o -> o.getOrderStatusId().equals(statusId))
+                .filter(o -> o.getOrderStatus() != null &&
+                        o.getOrderStatus().getOrderStatusId().equals(statusId))
                 .collect(Collectors.toList());
 
         return orderMapper.toDTOList(statusOrders);
@@ -277,7 +288,7 @@ public class OrderService {
         // TODO Etapa 06: List<Order> orders = orderRepository.findByCreatedAtBetween(start, end);
         List<Order> rangeOrders = ordersInMemory.stream()
                 .filter(o -> o.getCreatedAt().isAfter(startDate) &&
-                           o.getCreatedAt().isBefore(endDate))
+                        o.getCreatedAt().isBefore(endDate))
                 .collect(Collectors.toList());
 
         return orderMapper.toDTOList(rangeOrders);
@@ -294,7 +305,7 @@ public class OrderService {
     public String generateOrderNumber() {
         String prefix = AppConfig.getOrderNumberPrefix(); // "ORD-"
         String date = LocalDateTime.now().format(
-            DateTimeFormatter.ofPattern("yyyyMMdd"));
+                DateTimeFormatter.ofPattern("yyyyMMdd"));
         String randomPart = String.format("%06d", random.nextInt(1000000));
 
         return prefix + date + "-" + randomPart;
