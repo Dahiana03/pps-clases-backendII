@@ -24,6 +24,7 @@ public class CategoryDTO {
     private Integer subcategoriesCount;
     private Integer productsCount;
     private List<CategoryDTO> subcategories;
+    private Object getOrderStatusId;
 
     // Constructor vacío
     public CategoryDTO() {
@@ -151,5 +152,9 @@ public class CategoryDTO {
                 ", subcategoriesCount=" + subcategoriesCount +
                 ", productsCount=" + productsCount +
                 '}';
+    }
+
+    public Object getOrderStatusId() {
+        return this.getOrderStatusId;
     }
 }

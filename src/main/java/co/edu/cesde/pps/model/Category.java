@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 
+
 public class Category {
 
     @Id
@@ -61,11 +64,12 @@ public class Category {
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     @JsonManagedReference("category-parent")
     @Builder.Default
-    private List<Category> subcategories;
+    private List<Category> subcategories = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @Builder.Default
-    private List<Product> products;
+    private List<Product> products= new ArrayList<>();
+
 
 
     /**
@@ -94,19 +98,6 @@ public class Category {
 
     // toString sin navegación a objetos relacionados (solo IDs y tamaño de colecciones)
 
-  /* se deja por sino se debe de borrar
-   @Override
-    public String toString() {
-        return "Category{" +
-                "categoryId=" + categoryId +
-                ", parentId=" + (parent != null ? parent.getCategoryId() : null) +
-                ", name='" + name + '\'' +
-                ", slug='" + slug + '\'' +
-                ", isRoot=" + isRootCategory() +
-                ", subcategoriesCount=" + (subcategories != null ? subcategories.size() : 0) +
-                ", productsCount=" + (products != null ? products.size() : 0) +
-                '}';
-    }*/
 
     @Override
     public String toString() {

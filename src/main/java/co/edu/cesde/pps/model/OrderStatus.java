@@ -1,5 +1,6 @@
 package co.edu.cesde.pps.model;
 
+import co.edu.cesde.pps.dto.CategoryDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,7 +27,7 @@ import java.util.Objects;
 @Builder
 @ToString
 
-public class OrderStatus {
+public class OrderStatus extends CategoryDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

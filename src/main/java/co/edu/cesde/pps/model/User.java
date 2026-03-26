@@ -1,5 +1,6 @@
 package co.edu.cesde.pps.model;
 
+import co.edu.cesde.pps.dto.UserDTO;
 import co.edu.cesde.pps.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -46,7 +47,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 @ToString
-public class User {
+public class User extends UserDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

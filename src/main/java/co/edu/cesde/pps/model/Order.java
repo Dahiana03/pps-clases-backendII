@@ -1,10 +1,13 @@
 package co.edu.cesde.pps.model;
 
+import co.edu.cesde.pps.dto.CategoryDTO;
+import co.edu.cesde.pps.dto.UserDTO;
 import co.edu.cesde.pps.util.CalculationUtils;
 import co.edu.cesde.pps.util.ValidationUtils;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -74,11 +77,11 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipping_address_id", nullable = false)
-    private Long shippingAddressId;
+    private Address shippingAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billing_address_id", nullable = false)
-    private Long billingAddressId;
+    private Address billingAddress;
 
     @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
     @Builder.Default
@@ -106,6 +109,8 @@ public class Order {
     @JsonManagedReference("order-items")
     @Builder.Default
     private List<OrderItem> items = new ArrayList<>();
+    private UserDTO user;
+    private CategoryDTO orderStatus;
 
     // Setters personalizados con validación (override de Lombok)
 
@@ -147,6 +152,14 @@ public class Order {
     @Override
     public int hashCode() {
         return Objects.hash(orderId);
+    }
+
+    public UserDTO getUser() {
+        return this.user;
+    }
+
+    public CategoryDTO getOrderStatus() {
+        return this.orderStatus;
     }
 
     // toString sin navegación a objetos relacionados (solo IDs y tamaño de colección)

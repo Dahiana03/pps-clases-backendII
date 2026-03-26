@@ -1,21 +1,10 @@
 spring:
-   application:
-    name: product-purchasing-system
-   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:bd_pps_backend}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: ${DB_USER:root}
-    password: ${DB_PASSWORD:}
+  datasource:
+    url: jdbc:mysql://localhost:3306/pps_backend?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: ""
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-jpa:
-  hibernate:
-   ddl-auto: ${DB_DDL_AUTO:update}
-  open-in-view: false
-  show-sql: ${DB_SHOW_SQL:true}
-  properties:
-     format_sql: true
-     use_sql_comments: true
-
-  sql:
-    init:
-       mode: never
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

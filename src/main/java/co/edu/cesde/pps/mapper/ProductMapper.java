@@ -63,7 +63,7 @@ public class ProductMapper {
      *
      * NOTA: No convierte Category, eso se maneja en el servicio.
      *
-     * @param dto DTO a convertir
+     // @param DTO a convertir
      * @return Product Entity o null si dto es null
      */
     public Product toEntity(ProductDTO dto) {
@@ -104,7 +104,7 @@ public class ProductMapper {
     /**
      * Convierte lista de ProductDTOs a lista de Product Entities.
      *
-     * @param dtos Lista de DTOs
+     // @param dtos Lista de DTOs
      * @return Lista de entities o lista vacía si dtos es null
      */
     public List<Product> toEntityList(List<ProductDTO> dtos) {
