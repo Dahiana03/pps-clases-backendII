@@ -8,6 +8,7 @@ import co.edu.cesde.pps.mapper.CategoryMapper;
 import co.edu.cesde.pps.model.Category;
 import co.edu.cesde.pps.util.StringUtils;
 import co.edu.cesde.pps.util.ValidationUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
  * - Inyección de CategoryRepository
  * - Persistencia real
  */
+@Service
 public class CategoryService {
 
     private final CategoryMapper categoryMapper;

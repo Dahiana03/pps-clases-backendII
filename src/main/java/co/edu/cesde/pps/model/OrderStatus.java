@@ -25,9 +25,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
-
-public class OrderStatus extends CategoryDTO {
+public class OrderStatus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +53,7 @@ public class OrderStatus extends CategoryDTO {
         return Objects.hash(orderStatusId);
     }
 
-    // toString sin navegación a objetos relacionados
+    // toString personalizado sin navegación a objetos relacionados
 
     @Override
     public String toString() {

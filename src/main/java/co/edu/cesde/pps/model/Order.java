@@ -50,13 +50,12 @@ import java.util.Objects;
  * - 1:N con Payment (pagos asociados, puede haber reintentos)
  */
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 public class Order {
 
     @Id
@@ -69,11 +68,11 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private Long userId; // NOT NULL - checkout requiere usuario registrado
+    private User user; // NOT NULL - checkout requiere usuario registrado
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_status_id", nullable = false)
-    private Long orderStatusId;
+    private OrderStatus orderStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipping_address_id", nullable = false)
@@ -103,14 +102,10 @@ public class Order {
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
-
-    // Colección para relación 1:N con OrderItem
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("order-items")
     @Builder.Default
     private List<OrderItem> items = new ArrayList<>();
-    private UserDTO user;
-    private CategoryDTO orderStatus;
 
     // Setters personalizados con validación (override de Lombok)
 
@@ -154,32 +149,22 @@ public class Order {
         return Objects.hash(orderId);
     }
 
-    public UserDTO getUser() {
-        return this.user;
-    }
+    // toString personalizado sin navegación a objetos relacionados (solo IDs y tamaño de colección)
 
-    public CategoryDTO getOrderStatus() {
-        return this.orderStatus;
-    }
-
-    // toString sin navegación a objetos relacionados (solo IDs y tamaño de colección)
-
-   /* por si no se debe borrar
     @Override
-
     public String toString() {
         return "Order{" +
                 "orderId=" + orderId +
                 ", orderNumber='" + orderNumber + '\'' +
-                ", userId=" + userId +
-                ", orderStatusId=" + orderStatusId +
-                ", shippingAddressId=" + shippingAddressId +
-                ", billingAddressId=" + billingAddressId +
+                ", user=" + (user != null ? user.getUserId() : null) +
+                ", orderStatus=" + (orderStatus != null ? orderStatus.getOrderStatusId() : null) +
+                ", shippingAddress=" + (shippingAddress != null ? shippingAddress.getAddressId() : null) +
+                ", billingAddress=" + (billingAddress != null ? billingAddress.getAddressId() : null) +
                 ", subtotal=" + subtotal +
                 ", tax=" + tax +
                 ", shippingCost=" + shippingCost +
                 ", total=" + total +
                 ", createdAt=" + createdAt +
                 '}';
-    }*/
+    }
 }

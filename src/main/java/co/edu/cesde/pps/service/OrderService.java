@@ -10,6 +10,7 @@ import co.edu.cesde.pps.mapper.OrderMapper;
 import co.edu.cesde.pps.model.*;
 import co.edu.cesde.pps.util.CalculationUtils;
 import co.edu.cesde.pps.config.AppConfig;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
  * - Inyección de OrderRepository
  * - Persistencia real
  */
+@Service
 public class OrderService {
 
     private final OrderMapper orderMapper;

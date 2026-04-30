@@ -8,6 +8,7 @@ import co.edu.cesde.pps.model.Address;
 import co.edu.cesde.pps.model.User;
 import co.edu.cesde.pps.util.ValidationUtils;
 import co.edu.cesde.pps.config.AppConfig;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
  * - Inyección de AddressRepository
  * - Persistencia real
  */
+@Service
 public class AddressService {
 
     private final AddressMapper addressMapper;

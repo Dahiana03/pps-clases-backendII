@@ -14,6 +14,7 @@ import co.edu.cesde.pps.model.Product;
 import co.edu.cesde.pps.model.User;
 import co.edu.cesde.pps.util.CalculationUtils;
 import co.edu.cesde.pps.util.ValidationUtils;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
  * - Inyección de CartRepository
  * - Persistencia real
  */
+@Service
 public class CartService {
 
     private final CartMapper cartMapper;
